@@ -5,27 +5,31 @@ import java.awt.*;
 public class Pieces {
 	
 	private static boolean isLifted = false;
+	private static boolean checkered = false;
 	private static JButton liftedPiece = new JButton();
-	private ActionListener actionListener;
+	private static ActionListener actionListener;
 	
 	public Pieces() {
 		actionListener = new ActionListener() {
 			@Override
 		    public void actionPerformed(ActionEvent actionEvent) {
-				JButton button = (JButton)actionEvent.getSource();
+				JButton piece = (JButton)actionEvent.getSource();
 				
 				if(!isLifted)
 				{
-					button.setEnabled(false);
-					liftedPiece = button;
+					piece.setEnabled(false);
+					liftedPiece = piece;
 					isLifted = true;
 				}
 				else
 				{
-					String original = button.getActionCommand();
-					button.setText(liftedPiece.getActionCommand());
+					String pieceString = piece.getActionCommand();
+					Color pieceColor = piece.getForeground();
+					piece.setText(liftedPiece.getActionCommand());
+					piece.setForeground(liftedPiece.getForeground());
 					liftedPiece.setEnabled(true); 
-					liftedPiece.setText(original);
+					liftedPiece.setText(pieceString);
+					liftedPiece.setForeground(pieceColor);
 					isLifted = false;
 				}
 		    }
@@ -39,7 +43,13 @@ public class Pieces {
 		else
 			button.setForeground(Color.black);
 
-		button.setBackground(new Color(150,150,150));
+		if(checkered)
+			button.setBackground(new Color(160,180,250));
+		else
+			button.setBackground(new Color(200,200,250));
+		
+		checkered = !checkered;
+		
 		button.addActionListener(actionListener);
 	}
 	
