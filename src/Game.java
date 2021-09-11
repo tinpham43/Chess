@@ -50,8 +50,10 @@ public class Game {
 					liftedPiece.setText("");
 					liftedPiece.setBackground(original);
 					playerTurn = !playerTurn;
+					Board.getInstance().movePiece(liftedPiece.getXPiece(), liftedPiece.getYPiece(), 
+												  piece.getXPiece(), piece.getYPiece());
 					Board.getInstance().changeTurn();
-					
+
 					isLifted = false;
 				}
 				else if(isLifted)
