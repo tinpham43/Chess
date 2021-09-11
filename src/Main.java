@@ -7,20 +7,21 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		Board board = Board.getInstance();
-		board.printBoard();
-		
+		Board.getInstance().printBoard();
+
 		JButton reset = new JButton("RESET");
 		reset.setBounds(0,0,100,50);
 		reset.addActionListener(new ActionListener() {
 			@Override
 		    public void actionPerformed(ActionEvent actionEvent) {
+				f.dispose();
 				f = new JFrame();
-				board.createBoard(f);
+				f.add(reset);
+				Board.getInstance().createBoard(f);
 		    }
 		});
 		
 		f.add(reset);
-		board.createBoard(f);
+		Board.getInstance().createBoard(f);
 	}
 }
