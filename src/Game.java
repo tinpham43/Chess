@@ -45,15 +45,19 @@ public class Game {
 				}
 				else if(isLifted && MovePiece.getInstance().validMove(piece))
 				{
-					piece.setText(liftedPiece.getActionCommand());
-					piece.setForeground(liftedPiece.getForeground());
-					liftedPiece.setText("");
-					liftedPiece.setBackground(original);
-					playerTurn = !playerTurn;
-					Board.getInstance().movePiece(liftedPiece.getXPiece(), liftedPiece.getYPiece(), 
-												  piece.getXPiece(), piece.getYPiece());
+					/*if(liftedPiece.getActionCommand().equals("K") && 
+					   piece.getActionCommand().equals("R"))
+						castle();
+					else
+					{*/
+						piece.setText(liftedPiece.getActionCommand());
+						piece.setForeground(liftedPiece.getForeground());
+						liftedPiece.setText("");
+						liftedPiece.setBackground(original);
+					//}
+						//Board.getInstance().printBoard();
 					Board.getInstance().changeTurn();
-
+					playerTurn = !playerTurn;
 					isLifted = false;
 				}
 				else if(isLifted)
@@ -62,6 +66,17 @@ public class Game {
 				}
 		    }
 		};
+	}
+	
+	public void castle()
+	{
+		/*piece.setText(liftedPiece.getActionCommand());
+		piece.setForeground(liftedPiece.getForeground());
+		liftedPiece.setText("");
+		liftedPiece.setBackground(original);
+		Board.getInstance().movePiece(liftedPiece.getXPiece(), liftedPiece.getYPiece(), 
+									  piece.getXPiece(), piece.getYPiece());
+		Board.getInstance().changeTurn();*/;
 	}
 	
 	public void setPieceParameters(Piece button, ActionListener actionListener, String str)

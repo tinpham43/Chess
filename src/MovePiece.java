@@ -22,7 +22,7 @@ public class MovePiece {
 	
 	public boolean validMove(Piece newPiece) {
 		boolean ret = false;
-		
+
 		switch(piece.getActionCommand())
 		{
 			case "p":
@@ -288,10 +288,23 @@ public class MovePiece {
 		int xDistance = newPiece.getYPiece() - piece.getYPiece();
 		int yDistance = newPiece.getXPiece() - piece.getXPiece();
 
-		if(xDistance <= 1 && xDistance >= -1 && 
-		   yDistance <= 1 && yDistance >= -1 && 
-		  (newPiece.getActionCommand().equals("") ||
-		  !newPiece.getForeground().equals(piece.getForeground())))
+		if(!piece.hasKingMoved() && !newPiece.hasRookMoved() &&
+			newPiece.getActionCommand().equals(""))
+		{
+			int negative = xDistance < 0 ? -1 : 1;
+			
+			for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
+			{
+				if(!Board.getInstance().getPiece(piece.getXPiece(), piece.getYPiece() + (i * negative)).equals(""))
+					return false;
+			}
+			
+			return true;
+		}
+		else if(xDistance <= 1 && xDistance >= -1 && 
+			    yDistance <= 1 && yDistance >= -1 && 
+			   (newPiece.getActionCommand().equals("") ||
+			   !newPiece.getForeground().equals(piece.getForeground())))
 		{
 			return true;
 		}
