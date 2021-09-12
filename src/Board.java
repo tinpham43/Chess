@@ -10,8 +10,6 @@ public class Board {
 	private static final int BOARD_SIZE = 8;
 	private static JFrame f = new JFrame();
 	private JLabel label;
-	private Piece whiteKing;
-	private Piece blackKing;
 	private List<List<Piece>> board;
 	private Game game;
 	private static Board instance = null;
@@ -127,20 +125,77 @@ public class Board {
 						{
 							if(MovePiece.getInstance().validMove(board.get(i).get(j), board.get(k).get(l)))
 							{
-								Piece piece = board.get(k).get(l);
-								Piece liftedPiece = board.get(i).get(j);
+								String pieceString = board.get(k).get(l).getActionCommand();
+								Color pieceColor = board.get(k).get(l).getForeground();
+								Color liftedPieceColor = board.get(i).get(j).getForeground();
+								board.get(k).get(l).setText(board.get(i).get(j).getActionCommand());
+								board.get(k).get(l).setForeground(liftedPieceColor);
+								board.get(i).get(j).setText("");
+								updateHeapMap();
 								
-								if(!whiteKing.isBlackMap())
+								if(!findKing(Color.white).isBlackMap())
 									return false;
 								
+								board.get(i).get(j).setText(board.get(k).get(l).getActionCommand());
+								board.get(k).get(l).setText(pieceString);
+								board.get(k).get(l).setForeground(pieceColor);
+								updateHeapMap();
+							}
+						}
+					}
+				}
+				else if(color.equals(Color.black) &&
+					   board.get(i).get(j).getForeground().equals(Color.black) &&
+					  !board.get(i).get(j).getActionCommand().equals(""))
+				{
+					for(int k = 0; k < BOARD_SIZE; k++)
+					{
+						for(int l = 0; l < BOARD_SIZE; l++)
+						{
+							if(MovePiece.getInstance().validMove(board.get(i).get(j), board.get(k).get(l)))
+							{
+								String pieceString = board.get(k).get(l).getActionCommand();
+								Color pieceColor = board.get(k).get(l).getForeground();
+								Color liftedPieceColor = board.get(i).get(j).getForeground();
+								board.get(k).get(l).setText(board.get(i).get(j).getActionCommand());
+								board.get(k).get(l).setForeground(liftedPieceColor);
+								board.get(i).get(j).setText("");
+								updateHeapMap();
+								
+								if(!findKing(Color.black).isWhiteMap())
+									return false;
+								
+								board.get(i).get(j).setText(board.get(k).get(l).getActionCommand());
+								board.get(k).get(l).setText(pieceString);
+								board.get(k).get(l).setForeground(pieceColor);
+								updateHeapMap();
 							}
 						}
 					}
 				}
 			}
 		}
-		
+
 		return true;
+	}
+	
+	public Piece findKing(Color color) {
+		for(int i = 0; i < BOARD_SIZE; i++)
+		{
+			for(int j = 0; j < BOARD_SIZE; j++)
+			{
+				if(color.equals(Color.white) && 
+				   board.get(i).get(j).getActionCommand().equals("K") &&
+				   board.get(i).get(j).getForeground().equals(Color.white))
+					return board.get(i).get(j);
+				else if(color.equals(Color.black) && 
+				   board.get(i).get(j).getActionCommand().equals("K") &&
+				   board.get(i).get(j).getForeground().equals(Color.black))
+					return board.get(i).get(j);
+			}
+		}
+		
+		return null;
 	}
 	
 	public String getPiece(int x, int y) {

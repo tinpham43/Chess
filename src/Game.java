@@ -85,9 +85,9 @@ public class Game {
 
 						if(Board.getInstance().isCheck(opposite))
 						{
-							/*if(Board.getInstance().isCheckMate(opposite))
+							if(Board.getInstance().isCheckMate(opposite))
 								gameOver();
-							else*/
+							else
 								JOptionPane.showMessageDialog(new JFrame(), "Check!");
 						}
 						
@@ -105,7 +105,7 @@ public class Game {
 	
 	private void gameOver()
 	{
-		;
+		JOptionPane.showMessageDialog(new JFrame(), "Checkmate!");
 	}
 		
 	private void castle()
