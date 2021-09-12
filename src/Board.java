@@ -1,4 +1,4 @@
-
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -92,6 +92,43 @@ public class Board {
 	
 	public void updateHeapMap() {
 		HeatMap.updateHeatMap(board);
+	}
+	
+	public boolean isCheck(Color color) {
+		for(int i = 0; i < BOARD_SIZE; i++)
+		{
+			for(int j = 0; j < BOARD_SIZE; j++)
+			{
+				if(board.get(i).get(j).getActionCommand().equals("K") &&
+			       board.get(i).get(j).getForeground().equals(color) &&
+				  (color.equals(Color.black) && board.get(i).get(j).isWhiteMap() ||
+				   color.equals(Color.white) && board.get(i).get(j).isBlackMap()))
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean isCheckMate(Color color) {
+		for(int i = 0; i < BOARD_SIZE; i++)
+		{
+			for(int j = 0; j < BOARD_SIZE; j++)
+			{
+				if(color.equals(Color.white))
+				{
+					if(board.get(i).get(j).isBlackMap() &&
+				     ((board.get(i).get(j).getForeground().equals(Color.white) &&
+					   board.get(i).get(j).isBlackMap()) || 
+		    		  (board.get(i).get(j).getForeground().equals(Color.black) &&
+		    		   board.get(i).get(j).isWhiteMap())))
+						return true;
+				}
+				
+			}
+		}
+		
+		return false;
 	}
 	
 	public String getPiece(int x, int y) {

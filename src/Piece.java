@@ -55,6 +55,14 @@ public class Piece extends JButton {
 		blackHeatMap = bool;
 	}
 	
+	public boolean isWhiteMap() {
+		return whiteHeatMap;
+	}
+	
+	public boolean isBlackMap() {
+		return blackHeatMap;
+	}
+	
 	public void movedKing() {
 		kingMoved = true;
 	}

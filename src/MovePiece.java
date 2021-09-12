@@ -288,7 +288,7 @@ public class MovePiece {
 		int xDistance = newPiece.getYPiece() - piece.getYPiece();
 		int yDistance = newPiece.getXPiece() - piece.getXPiece();
 
-		if(!piece.hasKingMoved() && !newPiece.hasRookMoved() &&
+		/*if(!piece.hasKingMoved() && !newPiece.hasRookMoved() &&
 			newPiece.getActionCommand().equals(""))
 		{
 			int negative = xDistance < 0 ? -1 : 1;
@@ -301,7 +301,7 @@ public class MovePiece {
 			
 			return true;
 		}
-		else if(xDistance <= 1 && xDistance >= -1 && 
+		else */if(xDistance <= 1 && xDistance >= -1 && 
 			    yDistance <= 1 && yDistance >= -1 && 
 			   (newPiece.getActionCommand().equals("") ||
 			   !newPiece.getForeground().equals(piece.getForeground())))

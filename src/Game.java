@@ -9,7 +9,7 @@ public class Game {
 	
 	private static final Color GREY = new Color(150,150,150);
 	private Color original;
-	private boolean playerTurn;
+	private boolean whiteTurn;
 	private boolean isLifted;
 	private boolean checkered;
 	private int count;
@@ -17,7 +17,7 @@ public class Game {
 	private ActionListener actionListener;
 	
 	public Game() {
-		playerTurn = true;
+		whiteTurn = true;
 		isLifted = false;
 		checkered = false;
 		count = 0;
@@ -28,8 +28,8 @@ public class Game {
 				Piece piece = (Piece)actionEvent.getSource();
 				
 				if(!isLifted && !piece.getActionCommand().equals("") && 
-				   ((piece.getForeground() == Color.white && playerTurn == true) ||
-					(piece.getForeground() == Color.black && playerTurn == false)))
+				   ((piece.getForeground() == Color.white && whiteTurn == true) ||
+					(piece.getForeground() == Color.black && whiteTurn == false)))
 				{
 					original = piece.getBackground();
 					piece.setBackground(GREY);
@@ -45,25 +45,48 @@ public class Game {
 				}
 				else if(isLifted && MovePiece.getInstance().validMove(piece))
 				{
-					/*if(liftedPiece.getActionCommand().equals("K") && 
-					   piece.getActionCommand().equals("R"))
-						castle();
-					else
-					{*/
-						piece.setText(liftedPiece.getActionCommand());
-						piece.setForeground(liftedPiece.getForeground());
-						liftedPiece.setText("");
-						liftedPiece.setBackground(original);
-					//}
+						/*if(liftedPiece.getActionCommand().equals("K") && 
+						   piece.getActionCommand().equals("R"))
+							castle();
+						else
+						{*/
+					String pieceString = piece.getActionCommand();
+					Color pieceColor = piece.getForeground();
+					Color liftedPieceColor = liftedPiece.getForeground();
+					piece.setText(liftedPiece.getActionCommand());
+					piece.setForeground(liftedPieceColor);
+					liftedPiece.setText("");
+					Board.getInstance().updateHeapMap();
+						//}
 						//Board.getInstance().printBoard();
-					Board.getInstance().changeTurn();
-					playerTurn = !playerTurn;
-					isLifted = false;
+
+					if(Board.getInstance().isCheck(liftedPieceColor))
+					{
+						liftedPiece.setText(piece.getActionCommand());
+						piece.setText(pieceString);
+						piece.setForeground(pieceColor);
+						Board.getInstance().updateHeapMap();
+						JOptionPane.showMessageDialog(new JFrame(), "In check!");
+					}
+					else
+					{
+						Color opposite;
+						if(liftedPieceColor.equals(Color.black))
+							opposite = Color.white;
+						else
+							opposite = Color.black;
+						
+						if(Board.getInstance().isCheck(opposite))
+							JOptionPane.showMessageDialog(new JFrame(), "Check!");
+						
+						liftedPiece.setBackground(original);
+						Board.getInstance().changeTurn();
+						whiteTurn = !whiteTurn;
+						isLifted = false;
+					}
 				}
 				else if(isLifted)
-				{
 					JOptionPane.showMessageDialog(new JFrame(), "Invalid move.");
-				}
 		    }
 		};
 	}
