@@ -10,6 +10,8 @@ public class Board {
 	private static final int BOARD_SIZE = 8;
 	private static JFrame f = new JFrame();
 	private JLabel label;
+	private Piece whiteKing;
+	private Piece blackKing;
 	private List<List<Piece>> board;
 	private Game game;
 	private static Board instance = null;
@@ -115,20 +117,30 @@ public class Board {
 		{
 			for(int j = 0; j < BOARD_SIZE; j++)
 			{
-				if(color.equals(Color.white))
+				if(color.equals(Color.white) &&
+				   board.get(i).get(j).getForeground().equals(Color.white) &&
+				  !board.get(i).get(j).getActionCommand().equals(""))
 				{
-					if(board.get(i).get(j).isBlackMap() &&
-				     ((board.get(i).get(j).getForeground().equals(Color.white) &&
-					   board.get(i).get(j).isBlackMap()) || 
-		    		  (board.get(i).get(j).getForeground().equals(Color.black) &&
-		    		   board.get(i).get(j).isWhiteMap())))
-						return true;
+					for(int k = 0; k < BOARD_SIZE; k++)
+					{
+						for(int l = 0; l < BOARD_SIZE; l++)
+						{
+							if(MovePiece.getInstance().validMove(board.get(i).get(j), board.get(k).get(l)))
+							{
+								Piece piece = board.get(k).get(l);
+								Piece liftedPiece = board.get(i).get(j);
+								
+								if(!whiteKing.isBlackMap())
+									return false;
+								
+							}
+						}
+					}
 				}
-				
 			}
 		}
 		
-		return false;
+		return true;
 	}
 	
 	public String getPiece(int x, int y) {

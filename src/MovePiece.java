@@ -3,10 +3,9 @@ import java.awt.Color;
 public class MovePiece {
 
 	private static MovePiece instance = null;
-	private Piece piece;
 	
 	private MovePiece() {
-		piece = new Piece();
+
 	}
 
 	public static MovePiece getInstance() {
@@ -15,33 +14,29 @@ public class MovePiece {
 		
 		return instance;
 	}
-	
-	public void setPiece(Piece newPiece) {
-		piece = newPiece;
-	}
-	
-	public boolean validMove(Piece newPiece) {
+
+	public boolean validMove(Piece piece, Piece newPiece) {
 		boolean ret = false;
 
 		switch(piece.getActionCommand())
 		{
 			case "p":
-				ret = movePawn(newPiece);
+				ret = movePawn(piece, newPiece);
 				break;
 			case "R":
-				ret = moveRook(newPiece);
+				ret = moveRook(piece, newPiece);
 				break;
 			case "H":
-				ret = moveKnight(newPiece);
+				ret = moveKnight(piece, newPiece);
 				break;
 			case "B":
-				ret = moveBishop(newPiece);
+				ret = moveBishop(piece, newPiece);
 				break;
 			case "Q":
-				ret = moveQueen(newPiece);
+				ret = moveQueen(piece, newPiece);
 				break;
 			case "K":
-				ret = moveKing(newPiece);
+				ret = moveKing(piece, newPiece);
 				break;
 			default:
 				break;
@@ -50,7 +45,7 @@ public class MovePiece {
 		return ret;
 	}
 
-	private boolean movePawn(Piece newPiece) {
+	private boolean movePawn(Piece piece, Piece newPiece) {
 		
 		int yDistance = newPiece.getXPiece() - piece.getXPiece();
 
@@ -98,7 +93,7 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveRook(Piece newPiece) {
+	private boolean moveRook(Piece piece, Piece newPiece) {
 		int xDistance = newPiece.getYPiece() - piece.getYPiece();
 		int yDistance = newPiece.getXPiece() - piece.getXPiece();
 
@@ -132,7 +127,7 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveKnight(Piece newPiece) {
+	private boolean moveKnight(Piece piece, Piece newPiece) {
 		int xDistance = newPiece.getYPiece() - piece.getYPiece();
 		int yDistance = newPiece.getXPiece() - piece.getXPiece();
 
@@ -152,7 +147,7 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveBishop(Piece newPiece) {
+	private boolean moveBishop(Piece piece, Piece newPiece) {
 		int xDistance = newPiece.getYPiece() - piece.getYPiece();
 		int yDistance = newPiece.getXPiece() - piece.getXPiece();
 
@@ -205,7 +200,7 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveQueen(Piece newPiece) {
+	private boolean moveQueen(Piece piece, Piece newPiece) {
 		int xDistance = newPiece.getYPiece() - piece.getYPiece();
 		int yDistance = newPiece.getXPiece() - piece.getXPiece();
 
@@ -284,7 +279,7 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveKing(Piece newPiece) {
+	private boolean moveKing(Piece piece, Piece newPiece) {
 		int xDistance = newPiece.getYPiece() - piece.getYPiece();
 		int yDistance = newPiece.getXPiece() - piece.getXPiece();
 

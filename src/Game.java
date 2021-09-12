@@ -26,15 +26,16 @@ public class Game {
 			@Override
 		    public void actionPerformed(ActionEvent actionEvent) {
 				Piece piece = (Piece)actionEvent.getSource();
+				String pieceString = piece.getActionCommand();
+				Color pieceColor = piece.getForeground();
 				
-				if(!isLifted && !piece.getActionCommand().equals("") && 
-				   ((piece.getForeground() == Color.white && whiteTurn == true) ||
-					(piece.getForeground() == Color.black && whiteTurn == false)))
+				if(!isLifted && !pieceString.equals("") && 
+				   ((pieceColor.equals(Color.white) && whiteTurn == true) ||
+					(pieceColor.equals(Color.black) && whiteTurn == false)))
 				{
 					original = piece.getBackground();
 					piece.setBackground(GREY);
 					liftedPiece = piece;
-					MovePiece.getInstance().setPiece(liftedPiece);
 					
 					isLifted = true;
 				}
@@ -43,15 +44,21 @@ public class Game {
 					liftedPiece.setBackground(original);
 					isLifted = false;
 				}
-				else if(isLifted && MovePiece.getInstance().validMove(piece))
+				else if(isLifted && !pieceString.equals("") &&
+						pieceColor.equals(liftedPiece.getForeground()))
+				{
+					liftedPiece.setBackground(original);
+					original = piece.getBackground();
+					piece.setBackground(GREY);
+					liftedPiece = piece;
+				}
+				else if(isLifted && MovePiece.getInstance().validMove(liftedPiece, piece))
 				{
 						/*if(liftedPiece.getActionCommand().equals("K") && 
 						   piece.getActionCommand().equals("R"))
 							castle();
 						else
 						{*/
-					String pieceString = piece.getActionCommand();
-					Color pieceColor = piece.getForeground();
 					Color liftedPieceColor = liftedPiece.getForeground();
 					piece.setText(liftedPiece.getActionCommand());
 					piece.setForeground(liftedPieceColor);
@@ -75,9 +82,14 @@ public class Game {
 							opposite = Color.white;
 						else
 							opposite = Color.black;
-						
+
 						if(Board.getInstance().isCheck(opposite))
-							JOptionPane.showMessageDialog(new JFrame(), "Check!");
+						{
+							/*if(Board.getInstance().isCheckMate(opposite))
+								gameOver();
+							else*/
+								JOptionPane.showMessageDialog(new JFrame(), "Check!");
+						}
 						
 						liftedPiece.setBackground(original);
 						Board.getInstance().changeTurn();
@@ -91,7 +103,12 @@ public class Game {
 		};
 	}
 	
-	public void castle()
+	private void gameOver()
+	{
+		;
+	}
+		
+	private void castle()
 	{
 		/*piece.setText(liftedPiece.getActionCommand());
 		piece.setForeground(liftedPiece.getForeground());
