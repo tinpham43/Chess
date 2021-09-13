@@ -1,5 +1,6 @@
 import javax.swing.JButton;
 
+@SuppressWarnings("serial")
 public class Piece extends JButton {
 
 	private int xPiece;

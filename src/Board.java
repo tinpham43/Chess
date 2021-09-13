@@ -91,6 +91,11 @@ public class Board {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	public List<List<Piece>> getBoard()
+	{
+		return board;
+	}
+	
 	public void updateHeapMap() {
 		HeatMap.updateHeatMap(board);
 	}

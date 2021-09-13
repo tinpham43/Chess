@@ -32,11 +32,11 @@ public class Game {
 				
 				movePiece(piece);
 				
-				if(!whiteTurn)
+				/*if(!whiteTurn)
 				{
 					isLifted = true;
 					movePiece(Computer.valueIteration(20, turnCount));
-				}
+				}*/
 		    }
 		};
 	}
@@ -103,6 +103,7 @@ public class Game {
 				turnCount++;
 				whiteTurn = !whiteTurn;
 				isLifted = false;
+				HeatMap.printHeatMap(Board.getInstance().getBoard());
 			}
 		}
 		else if(isLifted)
