@@ -76,17 +76,17 @@ public class Board {
 	}
 	
 	public void createBoard() {
-		f.add(turnLabel());
+		f.add(turnLabel("(White's turn)", 200, 0));
 
 		for(List<Piece> i : board)
 			for(Piece j : i)
 				f.add(j);
 
-		f.add(resetButton());
+		f.add(resetButton(f, 0, 0));
 		f.setTitle("Chess Game");
-		f.setSize(515,550);//400 width and 500 height
-		f.setLayout(null);//using no layout managers
-		f.setVisible(true);//making the frame visible
+		f.setSize(515,550);
+		f.setLayout(null);
+		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
@@ -111,6 +111,8 @@ public class Board {
 	}
 	
 	public boolean isCheckMate(Color color) {
+		boolean mate = true;
+		
 		for(int i = 0; i < BOARD_SIZE; i++)
 		{
 			for(int j = 0; j < BOARD_SIZE; j++)
@@ -123,7 +125,7 @@ public class Board {
 					{
 						for(int l = 0; l < BOARD_SIZE; l++)
 						{
-							if(MovePiece.getInstance().validMove(board.get(i).get(j), board.get(k).get(l)))
+							if(MovePiece.validMove(board.get(i).get(j), board.get(k).get(l)))
 							{
 								String pieceString = board.get(k).get(l).getActionCommand();
 								Color pieceColor = board.get(k).get(l).getForeground();
@@ -134,12 +136,15 @@ public class Board {
 								updateHeapMap();
 								
 								if(!findKing(Color.white).isBlackMap())
-									return false;
+									mate = false;
 								
 								board.get(i).get(j).setText(board.get(k).get(l).getActionCommand());
 								board.get(k).get(l).setText(pieceString);
 								board.get(k).get(l).setForeground(pieceColor);
 								updateHeapMap();
+								
+								if(mate == false)
+									return false;
 							}
 						}
 					}
@@ -152,7 +157,7 @@ public class Board {
 					{
 						for(int l = 0; l < BOARD_SIZE; l++)
 						{
-							if(MovePiece.getInstance().validMove(board.get(i).get(j), board.get(k).get(l)))
+							if(MovePiece.validMove(board.get(i).get(j), board.get(k).get(l)))
 							{
 								String pieceString = board.get(k).get(l).getActionCommand();
 								Color pieceColor = board.get(k).get(l).getForeground();
@@ -163,12 +168,15 @@ public class Board {
 								updateHeapMap();
 								
 								if(!findKing(Color.black).isWhiteMap())
-									return false;
+									mate = false;
 								
 								board.get(i).get(j).setText(board.get(k).get(l).getActionCommand());
 								board.get(k).get(l).setText(pieceString);
 								board.get(k).get(l).setForeground(pieceColor);
 								updateHeapMap();
+								
+								if(mate == false)
+									return false;
 							}
 						}
 					}
@@ -176,7 +184,7 @@ public class Board {
 			}
 		}
 
-		return true;
+		return mate;
 	}
 	
 	public Piece findKing(Color color) {
@@ -205,21 +213,23 @@ public class Board {
 		return board.get(x).get(y).getActionCommand();
 	}
 	
-	public JLabel turnLabel() {
-		label = new JLabel("(White's turn)");
-		label.setBounds(200,0,150,50);
+	public JLabel turnLabel(String s, int x, int y) {
+		label = new JLabel(s);
+		label.setBounds(x,y,150,50);
 		label.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
 		
 		return label;
 	}
 	
-	public JButton resetButton() {
+	public JButton resetButton(JFrame thisF, int x, int y) {
 		JButton reset = new JButton("RESET");
-		reset.setBounds(0,0,100,50);
+		reset.setBounds(x,y,100,50);
 		reset.addActionListener(new ActionListener() {
 			@Override
 		    public void actionPerformed(ActionEvent actionEvent) {
 				f.dispose();
+				if(!thisF.equals(null))
+					thisF.dispose();
 				instance = null;
 				Board.getInstance().createBoard();
 		    }

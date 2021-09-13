@@ -63,16 +63,16 @@ public class Piece extends JButton {
 		return blackHeatMap;
 	}
 	
-	public void movedKing() {
-		kingMoved = true;
+	public void moveKing(boolean bool) {
+		kingMoved = bool;
 	}
 	
 	public boolean hasKingMoved() {
 		return kingMoved;
 	}
 	
-	public void movedRook() {
-		rookMoved = true;
+	public void moveRook(boolean bool) {
+		rookMoved = bool;
 	}
 	
 	public boolean hasRookMoved() {

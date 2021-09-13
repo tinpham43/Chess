@@ -1,6 +1,7 @@
 import java.awt.event.*;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.*;
@@ -52,7 +53,7 @@ public class Game {
 					piece.setBackground(GREY);
 					liftedPiece = piece;
 				}
-				else if(isLifted && MovePiece.getInstance().validMove(liftedPiece, piece))
+				else if(isLifted && MovePiece.validMove(liftedPiece, piece))
 				{
 						/*if(liftedPiece.getActionCommand().equals("K") && 
 						   piece.getActionCommand().equals("R"))
@@ -77,20 +78,21 @@ public class Game {
 					}
 					else
 					{
-						Color opposite;
+						Color oppositeColor;
 						if(liftedPieceColor.equals(Color.black))
-							opposite = Color.white;
+							oppositeColor = Color.white;
 						else
-							opposite = Color.black;
+							oppositeColor = Color.black;
 
-						if(Board.getInstance().isCheck(opposite))
+						if(Board.getInstance().isCheck(oppositeColor))
 						{
-							if(Board.getInstance().isCheckMate(opposite))
-								gameOver();
+							if(Board.getInstance().isCheckMate(oppositeColor))
+								gameOver(oppositeColor);
 							else
 								JOptionPane.showMessageDialog(new JFrame(), "Check!");
 						}
 						
+						checkConditions(piece);
 						liftedPiece.setBackground(original);
 						Board.getInstance().changeTurn();
 						whiteTurn = !whiteTurn;
@@ -103,9 +105,26 @@ public class Game {
 		};
 	}
 	
-	private void gameOver()
+	private void gameOver(Color oppositeColor)
 	{
-		JOptionPane.showMessageDialog(new JFrame(), "Checkmate!");
+		JFrame restartFrame = new JFrame();
+		JLabel label = new JLabel("Checkmate!");
+		label.setBounds(50, 0, 150, 50);
+		label.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
+		restartFrame.add(label);
+		if(oppositeColor.equals(Color.black))
+			label = new JLabel("White wins!");
+		else
+			label = new JLabel("Black wins!");
+		label.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
+		label.setBounds(50, 50, 150, 20);
+		restartFrame.add(label);
+		restartFrame.add(Board.getInstance().resetButton(restartFrame, 55, 100));
+		restartFrame.setTitle("Game Over");
+		restartFrame.setSize(225, 215);
+		restartFrame.setLayout(null);
+		restartFrame.setVisible(true);
+		restartFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 		
 	private void castle()
@@ -117,6 +136,21 @@ public class Game {
 		Board.getInstance().movePiece(liftedPiece.getXPiece(), liftedPiece.getYPiece(), 
 									  piece.getXPiece(), piece.getYPiece());
 		Board.getInstance().changeTurn();*/;
+	}
+	
+	private void checkConditions(Piece piece)
+	{
+		if(piece.getActionCommand().equals("K"))
+			piece.moveKing(true);
+		else if(piece.getActionCommand().equals("R"))
+			piece.moveRook(true);
+		
+		boolean temp1 = piece.hasKingMoved();
+		boolean temp2 = piece.hasRookMoved();
+		piece.moveKing(liftedPiece.hasKingMoved());
+		piece.moveRook(liftedPiece.hasRookMoved());
+		liftedPiece.moveKing(temp1);
+		liftedPiece.moveRook(temp2);
 	}
 	
 	public void setPieceParameters(Piece button, ActionListener actionListener, String str)

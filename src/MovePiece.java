@@ -2,41 +2,28 @@ import java.awt.Color;
 
 public class MovePiece {
 
-	private static MovePiece instance = null;
-	
-	private MovePiece() {
-
-	}
-
-	public static MovePiece getInstance() {
-		if(instance == null)
-			instance = new MovePiece();
-		
-		return instance;
-	}
-
-	public boolean validMove(Piece piece, Piece newPiece) {
+	public static boolean validMove(Piece liftedPiece, Piece newPiece) {
 		boolean ret = false;
 
-		switch(piece.getActionCommand())
+		switch(liftedPiece.getActionCommand())
 		{
 			case "p":
-				ret = movePawn(piece, newPiece);
+				ret = movePawn(liftedPiece, newPiece);
 				break;
 			case "R":
-				ret = moveRook(piece, newPiece);
+				ret = moveRook(liftedPiece, newPiece);
 				break;
 			case "H":
-				ret = moveKnight(piece, newPiece);
+				ret = moveKnight(liftedPiece, newPiece);
 				break;
 			case "B":
-				ret = moveBishop(piece, newPiece);
+				ret = moveBishop(liftedPiece, newPiece);
 				break;
 			case "Q":
-				ret = moveQueen(piece, newPiece);
+				ret = moveQueen(liftedPiece, newPiece);
 				break;
 			case "K":
-				ret = moveKing(piece, newPiece);
+				ret = moveKing(liftedPiece, newPiece);
 				break;
 			default:
 				break;
@@ -45,45 +32,45 @@ public class MovePiece {
 		return ret;
 	}
 
-	private boolean movePawn(Piece piece, Piece newPiece) {
+	private static boolean movePawn(Piece liftedPiece, Piece newPiece) {
 		
-		int yDistance = newPiece.getXPiece() - piece.getXPiece();
+		int yDistance = newPiece.getXPiece() - liftedPiece.getXPiece();
 
-		if(piece.getForeground().equals(Color.white) &&
-		   piece.getYPiece() == newPiece.getYPiece())
+		if(liftedPiece.getForeground().equals(Color.white) &&
+		   liftedPiece.getYPiece() == newPiece.getYPiece())
 		{
-			String firstPiece = Board.getInstance().getPiece(piece.getXPiece() - 1, piece.getYPiece());
+			String firstPiece = Board.getInstance().getPiece(liftedPiece.getXPiece() - 1, liftedPiece.getYPiece());
 			
 		    if((yDistance == -1 && !firstPiece.equals("OOB") &&
 			  newPiece.getActionCommand().equals("")) ||
 			  (yDistance == -2 && firstPiece.equals("") &&
-			  piece.getXPiece() == 6 &&
+			  liftedPiece.getXPiece() == 6 &&
 			  newPiece.getActionCommand().equals("")))
 			   return true;
 		}
-		else if(piece.getForeground().equals(Color.white) &&
-			   (piece.getYPiece() + 1 == newPiece.getYPiece() ||
-				piece.getYPiece() - 1 == newPiece.getYPiece()))
+		else if(liftedPiece.getForeground().equals(Color.white) &&
+			   (liftedPiece.getYPiece() + 1 == newPiece.getYPiece() ||
+				liftedPiece.getYPiece() - 1 == newPiece.getYPiece()))
 		{
 			if(yDistance == -1 && !newPiece.getActionCommand().equals("") &&
 			  newPiece.getForeground().equals(Color.black))
 			   return true;
 		}
-		else if(piece.getForeground().equals(Color.black) &&
-				piece.getYPiece() == newPiece.getYPiece())
+		else if(liftedPiece.getForeground().equals(Color.black) &&
+				liftedPiece.getYPiece() == newPiece.getYPiece())
 		{
-			String firstPiece = Board.getInstance().getPiece(piece.getXPiece() + 1, piece.getYPiece());
+			String firstPiece = Board.getInstance().getPiece(liftedPiece.getXPiece() + 1, liftedPiece.getYPiece());
 			
 		    if((yDistance == 1 && !firstPiece.equals("OOB") &&
 		      newPiece.getActionCommand().equals("")) ||
 			  (yDistance == 2 && firstPiece.equals("") &&
-			  piece.getXPiece() == 1 &&
+			  liftedPiece.getXPiece() == 1 &&
 			  newPiece.getActionCommand().equals("")))
 			   return true;
 		}
-		else if(piece.getForeground().equals(Color.black) &&
-			   (piece.getYPiece() + 1 == newPiece.getYPiece() ||
-				piece.getYPiece() - 1 == newPiece.getYPiece()))
+		else if(liftedPiece.getForeground().equals(Color.black) &&
+			   (liftedPiece.getYPiece() + 1 == newPiece.getYPiece() ||
+				liftedPiece.getYPiece() - 1 == newPiece.getYPiece()))
 		{
 			if(yDistance == 1 && !newPiece.getActionCommand().equals("") &&
 		      newPiece.getForeground().equals(Color.white))
@@ -93,31 +80,31 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveRook(Piece piece, Piece newPiece) {
-		int xDistance = newPiece.getYPiece() - piece.getYPiece();
-		int yDistance = newPiece.getXPiece() - piece.getXPiece();
+	private static boolean moveRook(Piece liftedPiece, Piece newPiece) {
+		int xDistance = newPiece.getYPiece() - liftedPiece.getYPiece();
+		int yDistance = newPiece.getXPiece() - liftedPiece.getXPiece();
 
 		if(xDistance == 0 && (newPiece.getActionCommand().equals("") ||
-		  !newPiece.getForeground().equals(piece.getForeground())))
+		  !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			int negative = yDistance < 0 ? -1 : 1;
 
 			for(int i = 1; i <= (Math.abs(yDistance) - 1); i++)
 			{
-				if(!Board.getInstance().getPiece(piece.getXPiece() + (i * negative), piece.getYPiece()).equals(""))
+				if(!Board.getInstance().getPiece(liftedPiece.getXPiece() + (i * negative), liftedPiece.getYPiece()).equals(""))
 					return false;
 			}
 
 			return true;
 		}
 		else if(yDistance == 0 && (newPiece.getActionCommand().equals("") ||
-			   !newPiece.getForeground().equals(piece.getForeground())))
+			   !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			int negative = xDistance < 0 ? -1 : 1;
 			
 			for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 			{
-				if(!Board.getInstance().getPiece(piece.getXPiece(), piece.getYPiece() + (i * negative)).equals(""))
+				if(!Board.getInstance().getPiece(liftedPiece.getXPiece(), liftedPiece.getYPiece() + (i * negative)).equals(""))
 					return false;
 			}
 			
@@ -127,19 +114,19 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveKnight(Piece piece, Piece newPiece) {
-		int xDistance = newPiece.getYPiece() - piece.getYPiece();
-		int yDistance = newPiece.getXPiece() - piece.getXPiece();
+	private static boolean moveKnight(Piece liftedPiece, Piece newPiece) {
+		int xDistance = newPiece.getYPiece() - liftedPiece.getYPiece();
+		int yDistance = newPiece.getXPiece() - liftedPiece.getXPiece();
 
 		if(Math.abs(xDistance) == 1 && Math.abs(yDistance) == 2 && 
 		  (newPiece.getActionCommand().equals("") ||
-		  !newPiece.getForeground().equals(piece.getForeground())))
+		  !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			return true;
 		}
 		else if(Math.abs(xDistance) == 2 && Math.abs(yDistance) == 1 && 
 			   (newPiece.getActionCommand().equals("") ||
-			   !newPiece.getForeground().equals(piece.getForeground())))
+			   !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			return true;
 		}
@@ -147,19 +134,19 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveBishop(Piece piece, Piece newPiece) {
-		int xDistance = newPiece.getYPiece() - piece.getYPiece();
-		int yDistance = newPiece.getXPiece() - piece.getXPiece();
+	private static boolean moveBishop(Piece liftedPiece, Piece newPiece) {
+		int xDistance = newPiece.getYPiece() - liftedPiece.getYPiece();
+		int yDistance = newPiece.getXPiece() - liftedPiece.getXPiece();
 
 		if(Math.abs(xDistance) == Math.abs(yDistance) && 
 		  (newPiece.getActionCommand().equals("") ||
-		  !newPiece.getForeground().equals(piece.getForeground())))
+		  !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			if(xDistance > 0 && yDistance > 0)
 			{
 				for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 				{
-					if(!Board.getInstance().getPiece(piece.getXPiece() + i, piece.getYPiece() + i).equals(""))
+					if(!Board.getInstance().getPiece(liftedPiece.getXPiece() + i, liftedPiece.getYPiece() + i).equals(""))
 						return false;
 				}
 				
@@ -169,7 +156,7 @@ public class MovePiece {
 			{
 				for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 				{
-					if(!Board.getInstance().getPiece(piece.getXPiece() - i, piece.getYPiece() + i).equals(""))
+					if(!Board.getInstance().getPiece(liftedPiece.getXPiece() - i, liftedPiece.getYPiece() + i).equals(""))
 						return false;
 				}
 				
@@ -179,7 +166,7 @@ public class MovePiece {
 			{
 				for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 				{
-					if(!Board.getInstance().getPiece(piece.getXPiece() + i, piece.getYPiece() - i).equals(""))
+					if(!Board.getInstance().getPiece(liftedPiece.getXPiece() + i, liftedPiece.getYPiece() - i).equals(""))
 						return false;
 				}
 				
@@ -189,7 +176,7 @@ public class MovePiece {
 			{
 				for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 				{
-					if(!Board.getInstance().getPiece(piece.getXPiece() - i, piece.getYPiece() - i).equals(""))
+					if(!Board.getInstance().getPiece(liftedPiece.getXPiece() - i, liftedPiece.getYPiece() - i).equals(""))
 						return false;
 				}
 				
@@ -200,19 +187,19 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveQueen(Piece piece, Piece newPiece) {
-		int xDistance = newPiece.getYPiece() - piece.getYPiece();
-		int yDistance = newPiece.getXPiece() - piece.getXPiece();
+	private static boolean moveQueen(Piece liftedPiece, Piece newPiece) {
+		int xDistance = newPiece.getYPiece() - liftedPiece.getYPiece();
+		int yDistance = newPiece.getXPiece() - liftedPiece.getXPiece();
 
 		if(Math.abs(xDistance) == Math.abs(yDistance) && 
 		  (newPiece.getActionCommand().equals("") ||
-		  !newPiece.getForeground().equals(piece.getForeground())))
+		  !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			if(xDistance > 0 && yDistance > 0)
 			{
 				for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 				{
-					if(!Board.getInstance().getPiece(piece.getXPiece() + i, piece.getYPiece() + i).equals(""))
+					if(!Board.getInstance().getPiece(liftedPiece.getXPiece() + i, liftedPiece.getYPiece() + i).equals(""))
 						return false;
 				}
 				
@@ -222,7 +209,7 @@ public class MovePiece {
 			{
 				for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 				{
-					if(!Board.getInstance().getPiece(piece.getXPiece() - i, piece.getYPiece() + i).equals(""))
+					if(!Board.getInstance().getPiece(liftedPiece.getXPiece() - i, liftedPiece.getYPiece() + i).equals(""))
 						return false;
 				}
 				
@@ -232,7 +219,7 @@ public class MovePiece {
 			{
 				for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 				{
-					if(!Board.getInstance().getPiece(piece.getXPiece() + i, piece.getYPiece() - i).equals(""))
+					if(!Board.getInstance().getPiece(liftedPiece.getXPiece() + i, liftedPiece.getYPiece() - i).equals(""))
 						return false;
 				}
 				
@@ -242,7 +229,7 @@ public class MovePiece {
 			{
 				for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 				{
-					if(!Board.getInstance().getPiece(piece.getXPiece() - i, piece.getYPiece() - i).equals(""))
+					if(!Board.getInstance().getPiece(liftedPiece.getXPiece() - i, liftedPiece.getYPiece() - i).equals(""))
 						return false;
 				}
 				
@@ -250,26 +237,26 @@ public class MovePiece {
 			}
 		}
 		else if(xDistance == 0 && (newPiece.getActionCommand().equals("") ||
-				  !newPiece.getForeground().equals(piece.getForeground())))
+				  !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			int negative = yDistance < 0 ? -1 : 1;
 
 			for(int i = 1; i <= (Math.abs(yDistance) - 1); i++)
 			{
-				if(!Board.getInstance().getPiece(piece.getXPiece() + (i * negative), piece.getYPiece()).equals(""))
+				if(!Board.getInstance().getPiece(liftedPiece.getXPiece() + (i * negative), liftedPiece.getYPiece()).equals(""))
 					return false;
 			}
 
 			return true;
 		}
 		else if(yDistance == 0 && (newPiece.getActionCommand().equals("") ||
-			   !newPiece.getForeground().equals(piece.getForeground())))
+			   !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			int negative = xDistance < 0 ? -1 : 1;
 			
 			for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 			{
-				if(!Board.getInstance().getPiece(piece.getXPiece(), piece.getYPiece() + (i * negative)).equals(""))
+				if(!Board.getInstance().getPiece(liftedPiece.getXPiece(), liftedPiece.getYPiece() + (i * negative)).equals(""))
 					return false;
 			}
 			
@@ -279,27 +266,29 @@ public class MovePiece {
 		return false;
 	}
 	
-	private boolean moveKing(Piece piece, Piece newPiece) {
-		int xDistance = newPiece.getYPiece() - piece.getYPiece();
-		int yDistance = newPiece.getXPiece() - piece.getXPiece();
+	private static boolean moveKing(Piece liftedPiece, Piece newPiece) {
+		int xDistance = newPiece.getYPiece() - liftedPiece.getYPiece();
+		int yDistance = newPiece.getXPiece() - liftedPiece.getXPiece();
 
-		/*if(!piece.hasKingMoved() && !newPiece.hasRookMoved() &&
+		if(liftedPiece.getForeground().equals(Color.white) &&
+			xDistance > 0 && 
+				!liftedPiece.hasKingMoved() && !newPiece.hasRookMoved() &&
 			newPiece.getActionCommand().equals(""))
 		{
 			int negative = xDistance < 0 ? -1 : 1;
 			
 			for(int i = 1; i <= (Math.abs(xDistance) - 1); i++)
 			{
-				if(!Board.getInstance().getPiece(piece.getXPiece(), piece.getYPiece() + (i * negative)).equals(""))
+				if(!Board.getInstance().getPiece(liftedPiece.getXPiece(), liftedPiece.getYPiece() + (i * negative)).equals(""))
 					return false;
 			}
 			
 			return true;
 		}
-		else */if(xDistance <= 1 && xDistance >= -1 && 
+		else if(xDistance <= 1 && xDistance >= -1 && 
 			    yDistance <= 1 && yDistance >= -1 && 
 			   (newPiece.getActionCommand().equals("") ||
-			   !newPiece.getForeground().equals(piece.getForeground())))
+			   !newPiece.getForeground().equals(liftedPiece.getForeground())))
 		{
 			return true;
 		}
