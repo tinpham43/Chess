@@ -60,24 +60,21 @@ public class Game {
 							castle();
 						else
 						{*/
+					Board.getInstance().movePiece(liftedPiece, piece, false, pieceString, pieceColor);
 					Color liftedPieceColor = liftedPiece.getForeground();
-					piece.setText(liftedPiece.getActionCommand());
-					piece.setForeground(liftedPieceColor);
-					liftedPiece.setText("");
-					Board.getInstance().updateHeapMap();
 						//}
 						//Board.getInstance().printBoard();
 
 					if(Board.getInstance().isCheck(liftedPieceColor))
 					{
-						liftedPiece.setText(piece.getActionCommand());
-						piece.setText(pieceString);
-						piece.setForeground(pieceColor);
-						Board.getInstance().updateHeapMap();
+						Board.getInstance().movePiece(liftedPiece, piece, true, pieceString, pieceColor);
 						JOptionPane.showMessageDialog(new JFrame(), "In check!");
 					}
 					else
 					{
+						checkMoveConditions(piece);
+						castle(piece);
+						
 						Color oppositeColor;
 						if(liftedPieceColor.equals(Color.black))
 							oppositeColor = Color.white;
@@ -92,7 +89,6 @@ public class Game {
 								JOptionPane.showMessageDialog(new JFrame(), "Check!");
 						}
 						
-						checkConditions(piece);
 						liftedPiece.setBackground(original);
 						Board.getInstance().changeTurn();
 						whiteTurn = !whiteTurn;
@@ -123,34 +119,61 @@ public class Game {
 		restartFrame.setTitle("Game Over");
 		restartFrame.setSize(225, 215);
 		restartFrame.setLayout(null);
+		restartFrame.setLocationRelativeTo(null);
 		restartFrame.setVisible(true);
 		restartFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 		
-	private void castle()
+	private void castle(Piece piece)
 	{
-		/*piece.setText(liftedPiece.getActionCommand());
-		piece.setForeground(liftedPiece.getForeground());
-		liftedPiece.setText("");
-		liftedPiece.setBackground(original);
-		Board.getInstance().movePiece(liftedPiece.getXPiece(), liftedPiece.getYPiece(), 
-									  piece.getXPiece(), piece.getYPiece());
-		Board.getInstance().changeTurn();*/;
+		if(!(piece.getActionCommand().equals("K") && 
+				Math.abs(piece.getYPiece() - liftedPiece.getYPiece()) == 2))
+			return;
+
+		Color pieceColor = liftedPiece.getForeground();
+		
+		if(piece.getXPiece() == 7 && piece.getYPiece() - liftedPiece.getYPiece() == 2)
+		{
+			Board.getInstance().movePiece(Board.getInstance().getPiece(7, 7), 
+					Board.getInstance().getPiece(7, 5), false, "", pieceColor);
+			
+			Board.getInstance().getPiece(7, 5).moveRook(true);
+		}
+		else if(piece.getXPiece() == 7 && piece.getYPiece() - liftedPiece.getYPiece() == -2)
+		{
+			Board.getInstance().movePiece(Board.getInstance().getPiece(7, 0), 
+					Board.getInstance().getPiece(7, 3), false, "", pieceColor);
+			
+			Board.getInstance().getPiece(7, 3).moveRook(true);
+		}
+		else if(piece.getXPiece() == 0 && piece.getYPiece() - liftedPiece.getYPiece() == 2)
+		{
+			Board.getInstance().movePiece(Board.getInstance().getPiece(0, 7), 
+					Board.getInstance().getPiece(0, 5), false, "", pieceColor);
+			
+			Board.getInstance().getPiece(0, 5).moveRook(true);
+		}
+		else if(piece.getXPiece() == 0 && piece.getYPiece() - liftedPiece.getYPiece() == -2)
+		{
+			Board.getInstance().movePiece(Board.getInstance().getPiece(0, 0), 
+					Board.getInstance().getPiece(0, 3), false, "", pieceColor);
+			
+			Board.getInstance().getPiece(0, 3).moveRook(true);
+		}
 	}
 	
-	private void checkConditions(Piece piece)
+	private void checkMoveConditions(Piece piece)
 	{
 		if(piece.getActionCommand().equals("K"))
+		{
 			piece.moveKing(true);
+			liftedPiece.moveKing(false);
+		}
 		else if(piece.getActionCommand().equals("R"))
+		{
 			piece.moveRook(true);
-		
-		boolean temp1 = piece.hasKingMoved();
-		boolean temp2 = piece.hasRookMoved();
-		piece.moveKing(liftedPiece.hasKingMoved());
-		piece.moveRook(liftedPiece.hasRookMoved());
-		liftedPiece.moveKing(temp1);
-		liftedPiece.moveRook(temp2);
+			liftedPiece.moveRook(false);
+		}
 	}
 	
 	public void setPieceParameters(Piece button, ActionListener actionListener, String str)

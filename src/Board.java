@@ -86,6 +86,7 @@ public class Board {
 		f.setTitle("Chess Game");
 		f.setSize(515,550);
 		f.setLayout(null);
+		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -161,19 +162,12 @@ public class Board {
 							{
 								String pieceString = board.get(k).get(l).getActionCommand();
 								Color pieceColor = board.get(k).get(l).getForeground();
-								Color liftedPieceColor = board.get(i).get(j).getForeground();
-								board.get(k).get(l).setText(board.get(i).get(j).getActionCommand());
-								board.get(k).get(l).setForeground(liftedPieceColor);
-								board.get(i).get(j).setText("");
-								updateHeapMap();
+								movePiece(board.get(i).get(j), board.get(k).get(l), false, pieceString, pieceColor);
 								
 								if(!findKing(Color.black).isWhiteMap())
 									mate = false;
 								
-								board.get(i).get(j).setText(board.get(k).get(l).getActionCommand());
-								board.get(k).get(l).setText(pieceString);
-								board.get(k).get(l).setForeground(pieceColor);
-								updateHeapMap();
+								movePiece(board.get(i).get(j), board.get(k).get(l), true, pieceString, pieceColor);
 								
 								if(mate == false)
 									return false;
@@ -206,11 +200,29 @@ public class Board {
 		return null;
 	}
 	
-	public String getPiece(int x, int y) {
+	public Piece getPiece(int x, int y) {
 		if(x > 7 || x < 0 || y > 7 || y < 0)
-			return "OOB";
+			return null;
 		
-		return board.get(x).get(y).getActionCommand();
+		return board.get(x).get(y);
+	}
+	
+	public void movePiece(Piece liftedPiece, Piece piece, boolean revert, String pieceString, Color pieceColor) {
+		if(!revert)
+		{
+			Color liftedPieceColor = liftedPiece.getForeground();
+			piece.setText(liftedPiece.getActionCommand());
+			piece.setForeground(liftedPieceColor);
+			liftedPiece.setText("");
+		}
+		else
+		{
+			liftedPiece.setText(piece.getActionCommand());
+			piece.setText(pieceString);
+			piece.setForeground(pieceColor);
+		}
+		
+		updateHeapMap();
 	}
 	
 	public JLabel turnLabel(String s, int x, int y) {

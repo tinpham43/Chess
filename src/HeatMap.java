@@ -23,16 +23,16 @@ public class HeatMap {
 				{
 					if(board.get(i).get(j).getForeground().equals(Color.white))
 					{
-						if(j + 1 < BOARD_SIZE)
+						if(i - 1 >= 0 && j + 1 < BOARD_SIZE)
 							board.get(i - 1).get(j + 1).updateWhiteMap(true);
-						if(j - 1 >= 0)
+						if(i - 1 >= 0 && j - 1 >= 0)
 							board.get(i - 1).get(j - 1).updateWhiteMap(true);
 					}
 					else
 					{
-						if(j + 1 < BOARD_SIZE)
+						if(i + 1 < BOARD_SIZE && j + 1 < BOARD_SIZE)
 							board.get(i + 1).get(j + 1).updateBlackMap(true);
-						if(j - 1 >= 0)
+						if(i + 1 < BOARD_SIZE && j - 1 >= 0)
 							board.get(i + 1).get(j - 1).updateBlackMap(true);
 					}
 				}
