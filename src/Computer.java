@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Computer {
 
@@ -7,15 +9,15 @@ public class Computer {
 	private Piece liftedPiece;
 	private Piece newPiece;
 	
-	public Computer()
+	public Computer(List<List<Piece>> board)
 	{
 		moveSet = new ArrayList<Pair<Piece, Piece>>();
-		Pair<Piece, Piece> bothPieces = valueIteration(20, 1);
+		Pair<Piece, Piece> bothPieces = valueIteration(board, 20, 1);
 		liftedPiece = bothPieces.getKey();
 		newPiece = bothPieces.getValue();
 	}
 	
-	public static Pair<Piece, Piece> valueIteration(int lookup, int turnCount)
+	public Pair<Piece, Piece> valueIteration(List<List<Piece>> board, int lookup, int turnCount)
 	{
 		/*if(turnCount <= 1)
 			Board.getInstance().movePiece(
@@ -28,31 +30,17 @@ public class Computer {
 		}*/
 		
 		for(int i = 0; i < BOARD_SIZE; i++)
-		{
 			for(int j = 0; j < BOARD_SIZE; j++)
-			{
 				if(board.get(i).get(j).getForeground().equals(Color.black) &&
 				  !board.get(i).get(j).getActionCommand().equals(""))
-				{
 					for(int k = 0; k < BOARD_SIZE; k++)
-					{
 						for(int l = 0; l < BOARD_SIZE; l++)
-						{
 							if(MovePiece.validMove(board.get(i).get(j), board.get(k).get(l)))
-							{
-								moveSet.add(Pair(board.get(i).get(j), board.get(k).get(l)));
-							}
-						}
-					}
-				}
-			}
-		}
+								moveSet.add(new Pair<Piece, Piece>(board.get(i).get(j), board.get(k).get(l)));
 		
-		int rand = (int)Math.floor(Math.random()*(moveSet.size() + 1))
+		int rand = (int)Math.floor(Math.random() * moveSet.size());
 		
-		
-		
-		return new Piece();
+		return moveSet.get(rand);
 	}
 	
 	public Piece getLifted()

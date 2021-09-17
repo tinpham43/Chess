@@ -32,11 +32,15 @@ public class Game {
 				
 				movePiece(piece);
 				
-				/*if(!whiteTurn)
+				if(!whiteTurn)
 				{
 					isLifted = true;
-					movePiece(Computer.valueIteration(20, turnCount));
-				}*/
+					Computer comp = new Computer(Board.getInstance().getBoard());
+					liftedPiece = comp.getLifted();
+					piece = comp.getNew();
+					original = liftedPiece.getBackground();
+					movePiece(piece);
+				}
 		    }
 		};
 	}
@@ -103,7 +107,6 @@ public class Game {
 				turnCount++;
 				whiteTurn = !whiteTurn;
 				isLifted = false;
-				HeatMap.printHeatMap(Board.getInstance().getBoard());
 			}
 		}
 		else if(isLifted)
